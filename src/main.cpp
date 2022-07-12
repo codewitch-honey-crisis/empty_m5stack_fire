@@ -41,7 +41,7 @@ using color_t = color<typename lcd_t::pixel_type>;
 
 lcd_t lcd;
 
-// declare the MPU that's attached
+// declare the MPU6886 that's attached
 // to the first I2C host
 mpu6886 mpu(i2c_container<0>::instance());
 // the following is equiv at least on the ESP32
