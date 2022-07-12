@@ -4,6 +4,7 @@
 #include <mpu6886.hpp>
 #include <ili9341.hpp>
 #include <tft_io.hpp>
+#include <htcw_button.hpp>
 #include <gfx.hpp>
 #include <w2812.hpp>
 using namespace arduino;
@@ -15,6 +16,9 @@ constexpr static const int8_t lcd_pin_dc = 27;
 constexpr static const int8_t lcd_pin_rst = 33;
 constexpr static const int8_t lcd_pin_cs = 14;
 constexpr static const int8_t sd_pin_cs = 4;
+constexpr static const int8_t button_a_pin = 39;
+constexpr static const int8_t button_b_pin = 38;
+constexpr static const int8_t button_c_pin = 37;
 constexpr static const int8_t led_pin = 15;
 constexpr static const int8_t spi_pin_mosi = 23;
 constexpr static const int8_t spi_pin_clk = 18;
@@ -53,6 +57,10 @@ mpu6886 gyro(i2c_container<0>::instance());
 
 w2812 led_strips(10,led_pin,NEO_GBR);
 
+button<button_a_pin,10,true> button_a;
+button<button_b_pin,10,true> button_b;
+button<button_c_pin,10,true> button_c;
+
 // initialize M5 Stack Fire peripherals/features
 void initialize_m5stack_fire() {
     Serial.begin(115200);
@@ -67,6 +75,9 @@ void initialize_m5stack_fire() {
     // see https://github.com/m5stack/m5-docs/blob/master/docs/en/core/fire.md
     pinMode(led_pin, OUTPUT_OPEN_DRAIN);
     led_strips.initialize();
+    button_a.initialize();
+    button_b.initialize();
+    button_c.initialize();
 }
 void setup() {
     initialize_m5stack_fire();
