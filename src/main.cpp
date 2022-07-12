@@ -5,6 +5,7 @@
 #include <ili9341.hpp>
 #include <tft_io.hpp>
 #include <gfx.hpp>
+#include <w2812.hpp>
 using namespace arduino;
 using namespace gfx;
 
@@ -14,6 +15,7 @@ constexpr static const int8_t lcd_pin_dc = 27;
 constexpr static const int8_t lcd_pin_rst = 33;
 constexpr static const int8_t lcd_pin_cs = 14;
 constexpr static const int8_t sd_pin_cs = 4;
+constexpr static const int8_t led_pin = 15;
 constexpr static const int8_t spi_pin_mosi = 23;
 constexpr static const int8_t spi_pin_clk = 18;
 constexpr static const int8_t spi_pin_miso = 19;
@@ -45,9 +47,11 @@ lcd_t lcd;
 
 // declare the MPU6886 that's attached
 // to the first I2C host
-mpu6886 mpu(i2c_container<0>::instance());
+mpu6886 gyro(i2c_container<0>::instance());
 // the following is equiv at least on the ESP32
 // mpu6886 mpu(Wire);
+
+w2812 led_strips(10,led_pin,NEO_GBR);
 
 // initialize M5 Stack Fire peripherals/features
 void initialize_m5stack_fire() {
@@ -59,12 +63,17 @@ void initialize_m5stack_fire() {
     // with the pin assignments is 
     // initialized first.
     lcd.initialize();
-    mpu.initialize();
+    gyro.initialize();
+    // see https://github.com/m5stack/m5-docs/blob/master/docs/en/core/fire.md
+    pinMode(led_pin, OUTPUT_OPEN_DRAIN);
+    led_strips.initialize();
 }
 void setup() {
     initialize_m5stack_fire();
     // your code here
+    
 }
 void loop() {
-    // your code here
+
+
 }
