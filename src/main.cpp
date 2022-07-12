@@ -48,6 +48,8 @@ lcd_t lcd;
 mpu6886 mpu(i2c_container<0>::instance());
 // the following is equiv at least on the ESP32
 // mpu6886 mpu(Wire);
+
+// initialize M5 Stack Fire peripherals/features
 void initialize_m5stack_fire() {
     Serial.begin(115200);
     SPIFFS.begin(false);
