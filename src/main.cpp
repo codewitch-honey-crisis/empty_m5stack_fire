@@ -24,6 +24,9 @@ using bus_t = tft_spi_ex<spi_host,
                         SPI_MODE0,
                         false, 
                         320 * 240 * 2 + 8, 2>;
+// can be simplified since the M5 Stack
+// uses the default VSPI pins:
+// using bus_t = tft_spi<spi_host,lcd_pin_cs,SPI_MODE0,320*240*2+8,2>;
 
 using lcd_t = ili9342c<lcd_pin_dc, 
                       lcd_pin_rst, 
