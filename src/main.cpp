@@ -13,6 +13,7 @@ constexpr static const int8_t lcd_pin_bl = 32;
 constexpr static const int8_t lcd_pin_dc = 27;
 constexpr static const int8_t lcd_pin_rst = 33;
 constexpr static const int8_t lcd_pin_cs = 14;
+constexpr static const int8_t sd_pin_cs = 4;
 constexpr static const int8_t spi_pin_mosi = 23;
 constexpr static const int8_t spi_pin_clk = 18;
 constexpr static const int8_t spi_pin_miso = 19;
@@ -47,9 +48,19 @@ lcd_t lcd;
 mpu6886 mpu(i2c_container<0>::instance());
 // the following is equiv at least on the ESP32
 // mpu6886 mpu(Wire);
-void setup() {
+void initialize_m5stack_fire() {
     Serial.begin(115200);
     SPIFFS.begin(false);
+    SD.begin(4,spi_container<spi_host>::instance());
+    // since the peripherals share a bus, 
+    // make sure the first one (the LCD)
+    // with the pin assignments is 
+    // initialized first.
+    lcd.initialize();
+    mpu.initialize();
+}
+void setup() {
+    initialize_m5stack_fire();
     // your code here
 }
 void loop() {
