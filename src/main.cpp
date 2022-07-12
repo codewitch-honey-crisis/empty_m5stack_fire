@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <SPIFFS.h>
+#include <SD.h>
 #include <mpu6886.hpp>
 #include <ili9341.hpp>
 #include <tft_io.hpp>
