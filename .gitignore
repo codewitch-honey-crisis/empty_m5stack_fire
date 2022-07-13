@@ -4,3 +4,5 @@
 .vscode/launch.json
 .vscode/ipch
 include/open_weather_api_key.h
+tmp/bmm150.cpp
+tmp/bmm150.hpp

@@ -2,11 +2,14 @@
 #include <SPIFFS.h>
 #include <SD.h>
 #include <mpu6886.hpp>
-#include <ili9341.hpp>
 #include <tft_io.hpp>
+#include <ili9341.hpp>
+#include <w2812.hpp>
 #include <htcw_button.hpp>
 #include <gfx.hpp>
-#include <w2812.hpp>
+// font for example
+// not necessary
+#include "Ubuntu.hpp"
 using namespace arduino;
 using namespace gfx;
 
@@ -16,6 +19,8 @@ constexpr static const int8_t lcd_pin_dc = 27;
 constexpr static const int8_t lcd_pin_rst = 33;
 constexpr static const int8_t lcd_pin_cs = 14;
 constexpr static const int8_t sd_pin_cs = 4;
+constexpr static const int8_t speaker_pin_cs = 25;
+constexpr static const int8_t mic_pin_cs = 34;
 constexpr static const int8_t button_a_pin = 39;
 constexpr static const int8_t button_b_pin = 38;
 constexpr static const int8_t button_c_pin = 37;
@@ -27,14 +32,11 @@ constexpr static const int8_t spi_pin_miso = 19;
 using bus_t = tft_spi_ex<spi_host, 
                         lcd_pin_cs, 
                         spi_pin_mosi, 
-                        spi_pin_miso, 
+                        -1, 
                         spi_pin_clk, 
                         SPI_MODE0,
-                        false, 
+                        true, 
                         320 * 240 * 2 + 8, 2>;
-// can be simplified since the M5 Stack
-// uses the default VSPI pins:
-// using bus_t = tft_spi<spi_host,lcd_pin_cs,SPI_MODE0,320*240*2+8,2>;
 
 using lcd_t = ili9342c<lcd_pin_dc, 
                       lcd_pin_rst, 
@@ -71,6 +73,11 @@ void initialize_m5stack_fire() {
     // with the pin assignments is 
     // initialized first.
     lcd.initialize();
+    lcd.fill(lcd.bounds(),color_t::purple);
+    rect16 rect(0,0,64,64);
+    rect.center_inplace(lcd.bounds());
+    lcd.fill(rect,color_t::white);
+    lcd.fill(rect.inflate(-8,-8),color_t::purple);
     gyro.initialize();
     // see https://github.com/m5stack/m5-docs/blob/master/docs/en/core/fire.md
     pinMode(led_pin, OUTPUT_OPEN_DRAIN);
@@ -78,13 +85,34 @@ void initialize_m5stack_fire() {
     button_a.initialize();
     button_b.initialize();
     button_c.initialize();
+    lcd.fill(lcd.bounds(),color_t::black);
 }
 void setup() {
     initialize_m5stack_fire();
     // your code here
+
+
+    // example - go ahead and delete
+    const char* m5_text = "M5Stack";
+    constexpr static const uint16_t text_height = 80;
+    srect16 text_rect;
+    open_text_info text_draw_info;
+    const open_font &text_font = Ubuntu;
+    
+    text_draw_info.text = m5_text;
+    text_draw_info.font = &text_font;
+    text_draw_info.scale = text_font.scale(text_height);
+    text_draw_info.transparent_background = false;
+    text_rect = text_font.measure_text(ssize16::max(),spoint16::zero(),m5_text,text_draw_info.scale).bounds().center((srect16)lcd.bounds()).offset(0,-text_height/2);
+    draw::text(lcd,text_rect,text_draw_info,color_t::gray);
+    draw::line(lcd,srect16(text_rect.x1,text_rect.y1,text_rect.x1,text_rect.y2).offset(80,0),color_t::white);
+    const char* fire_text = "Fire";
+    text_draw_info.text = fire_text;
+    text_rect = text_font.measure_text(ssize16::max(),spoint16::zero(),fire_text,text_draw_info.scale).bounds().center((srect16)lcd.bounds()).offset(0,text_height/2);
+    draw::text(lcd,text_rect,text_draw_info,color_t::red);
+
     
 }
-void loop() {
-    // your code here
-
+void loop() {  
+    
 }
