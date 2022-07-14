@@ -86,8 +86,6 @@ void initialize_m5stack_fire() {
     button_a.initialize();
     button_b.initialize();
     button_c.initialize();
-    led_strips.fill(led_strips.bounds(),lscolor_t::black);
-    lcd.fill(lcd.bounds(),color_t::black);
 }
 
 // for the button callbacks
@@ -110,6 +108,7 @@ void setup() {
 
     
     // example - go ahead and delete
+    lcd.fill(lcd.bounds(),color_t::black);
     const char* m5_text = "M5Stack";
     constexpr static const uint16_t text_height = 80;
     srect16 text_rect;
