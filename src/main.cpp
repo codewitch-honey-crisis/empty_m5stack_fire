@@ -48,6 +48,7 @@ using lcd_t = ili9342c<lcd_pin_dc,
                       200>;
 
 using color_t = color<typename lcd_t::pixel_type>;
+using lscolor_t = color<typename w2812::pixel_type>;
 
 lcd_t lcd;
 
@@ -57,7 +58,7 @@ mpu6886 gyro(i2c_container<0>::instance());
 // the following is equiv at least on the ESP32
 // mpu6886 mpu(Wire);
 
-w2812 led_strips(10,led_pin,NEO_GBR);
+w2812 led_strips({5,2},led_pin,NEO_GBR);
 
 button<button_a_pin,10,true> button_a;
 button<button_b_pin,10,true> button_b;
@@ -73,7 +74,7 @@ void initialize_m5stack_fire() {
     // with the pin assignments is 
     // initialized first.
     lcd.initialize();
-    led_strips.fill(led_strips.bounds(),color<rgb_pixel<24>>::purple);
+    led_strips.fill(led_strips.bounds(),lscolor_t::purple);
     lcd.fill(lcd.bounds(),color_t::purple);
     rect16 rect(0,0,64,64);
     rect.center_inplace(lcd.bounds());
@@ -86,7 +87,7 @@ void initialize_m5stack_fire() {
     button_a.initialize();
     button_b.initialize();
     button_c.initialize();
-    led_strips.fill(led_strips.bounds(),color<rgb_pixel<24>>::black);
+    led_strips.fill(led_strips.bounds(),lscolor_t::black);
     lcd.fill(lcd.bounds(),color_t::black);
 }
 void setup() {
@@ -112,7 +113,8 @@ void setup() {
     text_draw_info.text = fire_text;
     text_rect = text_font.measure_text(ssize16::max(),spoint16::zero(),fire_text,text_draw_info.scale).bounds().center((srect16)lcd.bounds()).offset(0,text_height/2);
     draw::text(lcd,text_rect,text_draw_info,color_t::red);
-    
+    led_strips.fill({0,0,4,0},lscolor_t::red);
+    led_strips.fill({0,1,4,1},lscolor_t::blue);
 }
 void loop() {  
     
