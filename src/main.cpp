@@ -13,6 +13,7 @@
 using namespace arduino;
 using namespace gfx;
 
+// pin assignments
 constexpr static const uint8_t spi_host = VSPI;
 constexpr static const int8_t lcd_pin_bl = 32;
 constexpr static const int8_t lcd_pin_dc = 27;
@@ -47,7 +48,9 @@ using lcd_t = ili9342c<lcd_pin_dc,
                       400, 
                       200>;
 
+// lcd colors
 using color_t = color<typename lcd_t::pixel_type>;
+// led strip colors
 using lscolor_t = color<typename w2812::pixel_type>;
 
 lcd_t lcd;
