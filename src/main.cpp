@@ -72,10 +72,6 @@ void initialize_m5stack_fire() {
     Serial.begin(115200);
     SPIFFS.begin(false);
     SD.begin(4,spi_container<spi_host>::instance());
-    // since the peripherals share a bus, 
-    // make sure the first one (the LCD)
-    // with the pin assignments is 
-    // initialized first.
     lcd.initialize();
     led_strips.fill(led_strips.bounds(),lscolor_t::purple);
     lcd.fill(lcd.bounds(),color_t::purple);
