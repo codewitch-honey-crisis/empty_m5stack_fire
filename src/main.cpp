@@ -119,12 +119,27 @@ void setup() {
     text_draw_info.font = &text_font;
     text_draw_info.scale = text_font.scale(text_height);
     text_draw_info.transparent_background = false;
-    text_rect = text_font.measure_text(ssize16::max(),spoint16::zero(),m5_text,text_draw_info.scale).bounds().center((srect16)lcd.bounds()).offset(0,-text_height/2);
+    text_rect = text_font.measure_text(ssize16::max(),
+                                    spoint16::zero(),
+                                    m5_text,
+                                    text_draw_info.scale)
+                                        .bounds()
+                                            .center((srect16)lcd.bounds())
+                                                .offset(0,-text_height/2);
     draw::text(lcd,text_rect,text_draw_info,color_t::gray);
-    draw::line(lcd,srect16(text_rect.x1,text_rect.y1,text_rect.x1,text_rect.y2).offset(80,0),color_t::white);
+    draw::line(lcd,
+            srect16(text_rect.x1,text_rect.y1,text_rect.x1,text_rect.y2)
+                .offset(80,0),
+            color_t::white);
     const char* fire_text = "Fire";
     text_draw_info.text = fire_text;
-    text_rect = text_font.measure_text(ssize16::max(),spoint16::zero(),fire_text,text_draw_info.scale).bounds().center((srect16)lcd.bounds()).offset(0,text_height/2);
+    text_rect = text_font.measure_text(
+                                    ssize16::max(),
+                                    spoint16::zero(),
+                                    fire_text,text_draw_info.scale)
+                                        .bounds()
+                                            .center((srect16)lcd.bounds())
+                                                .offset(0,text_height/2);
     draw::text(lcd,text_rect,text_draw_info,color_t::red);
     led_strips.fill({0,0,4,0},lscolor_t::red);
     led_strips.fill({0,1,4,1},lscolor_t::blue);
