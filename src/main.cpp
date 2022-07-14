@@ -59,7 +59,7 @@ lcd_t lcd;
 // to the first I2C host
 mpu6886 gyro(i2c_container<0>::instance());
 // the following is equiv at least on the ESP32
-// mpu6886 mpu(Wire);
+// mpu6886 gyro(Wire);
 
 w2812 led_strips({5,2},led_pin,NEO_GBR);
 
