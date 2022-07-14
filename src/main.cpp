@@ -90,11 +90,26 @@ void initialize_m5stack_fire() {
     led_strips.fill(led_strips.bounds(),lscolor_t::black);
     lcd.fill(lcd.bounds(),color_t::black);
 }
+
+// for the button callbacks
+char button_states[3];
+void buttons_callback(bool pressed, void* state) {
+    Serial.printf("Button %c %s\n",*(char*)state,pressed?"pressed":"released");
+}
 void setup() {
     initialize_m5stack_fire();
+    
+    // setup the button callbacks (optional)
+    button_states[0]='a';
+    button_states[1]='b';
+    button_states[2]='c';
+    button_a.callback(buttons_callback,button_states);
+    button_b.callback(buttons_callback,button_states+1);
+    button_c.callback(buttons_callback,button_states+2);
+    
     // your code here
 
-
+    
     // example - go ahead and delete
     const char* m5_text = "M5Stack";
     constexpr static const uint16_t text_height = 80;
