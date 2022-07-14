@@ -116,6 +116,11 @@ void setup() {
     led_strips.fill({0,0,4,0},lscolor_t::red);
     led_strips.fill({0,1,4,1},lscolor_t::blue);
 }
-void loop() {  
-    
+void loop() {
+    // pump the buttons to make sure
+    // their callbacks (if any) get
+    // fired
+    button_a.update();
+    button_b.update();
+    button_c.update();
 }
