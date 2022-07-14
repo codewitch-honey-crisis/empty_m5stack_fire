@@ -73,6 +73,7 @@ void initialize_m5stack_fire() {
     // with the pin assignments is 
     // initialized first.
     lcd.initialize();
+    led_strips.fill(led_strips.bounds(),color<rgb_pixel<24>>::purple);
     lcd.fill(lcd.bounds(),color_t::purple);
     rect16 rect(0,0,64,64);
     rect.center_inplace(lcd.bounds());
@@ -85,6 +86,7 @@ void initialize_m5stack_fire() {
     button_a.initialize();
     button_b.initialize();
     button_c.initialize();
+    led_strips.fill(led_strips.bounds(),color<rgb_pixel<24>>::black);
     lcd.fill(lcd.bounds(),color_t::black);
 }
 void setup() {
@@ -110,7 +112,6 @@ void setup() {
     text_draw_info.text = fire_text;
     text_rect = text_font.measure_text(ssize16::max(),spoint16::zero(),fire_text,text_draw_info.scale).bounds().center((srect16)lcd.bounds()).offset(0,text_height/2);
     draw::text(lcd,text_rect,text_draw_info,color_t::red);
-
     
 }
 void loop() {  
