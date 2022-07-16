@@ -2,6 +2,7 @@
 #include <SPIFFS.h>
 #include <SD.h>
 #include <mpu6886.hpp>
+#include <ip5306.hpp>
 #include <tft_io.hpp>
 #include <ili9341.hpp>
 #include <w2812.hpp>
@@ -20,8 +21,8 @@ constexpr static const int8_t lcd_pin_dc = 27;
 constexpr static const int8_t lcd_pin_rst = 33;
 constexpr static const int8_t lcd_pin_cs = 14;
 constexpr static const int8_t sd_pin_cs = 4;
-constexpr static const int8_t speaker_pin_cs = 25;
-constexpr static const int8_t mic_pin_cs = 34;
+constexpr static const int8_t speaker_pin = 25;
+constexpr static const int8_t mic_pin = 34;
 constexpr static const int8_t button_a_pin = 39;
 constexpr static const int8_t button_b_pin = 38;
 constexpr static const int8_t button_c_pin = 37;
@@ -61,6 +62,8 @@ mpu6886 gyro(i2c_container<0>::instance());
 // the following is equiv at least on the ESP32
 // mpu6886 gyro(Wire);
 
+ip5306 power(i2c_container<0>::instance());
+
 w2812 led_strips({5,2},led_pin,NEO_GBR);
 
 button<button_a_pin,10,true> button_a;
@@ -73,6 +76,7 @@ void initialize_m5stack_fire() {
     SPIFFS.begin(false);
     SD.begin(4,spi_container<spi_host>::instance());
     lcd.initialize();
+    led_strips.initialize();
     led_strips.fill(led_strips.bounds(),lscolor_t::purple);
     lcd.fill(lcd.bounds(),color_t::purple);
     rect16 rect(0,0,64,64);
@@ -80,9 +84,9 @@ void initialize_m5stack_fire() {
     lcd.fill(rect,color_t::white);
     lcd.fill(rect.inflate(-8,-8),color_t::purple);
     gyro.initialize();
+    
     // see https://github.com/m5stack/m5-docs/blob/master/docs/en/core/fire.md
     pinMode(led_pin, OUTPUT_OPEN_DRAIN);
-    led_strips.initialize();
     button_a.initialize();
     button_b.initialize();
     button_c.initialize();
