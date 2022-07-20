@@ -76,8 +76,6 @@ button<button_c_pin,10,true> button_c;
 
 constexpr static const uint32_t lcd_dimmer_timout_ms = 5*1000;
 
-bool lcd_dimmer_dimmed;
-
 m5fire_lcd_dimmer lcd_dimmer;
 
 // initialize M5 Stack Fire peripherals/features
@@ -113,7 +111,6 @@ void buttons_callback(bool pressed, void* state) {
         lcd_dimmer.wake();
         led_strips.fill({0,0,4,0},lscolor_t::red);
         led_strips.fill({0,1,4,1},lscolor_t::blue);
-    
     }
 }
 void setup() {
