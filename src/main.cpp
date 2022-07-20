@@ -7,6 +7,7 @@
 #include <ili9341.hpp>
 #include <w2812.hpp>
 #include <htcw_button.hpp>
+#include <m5fire_audio.hpp>
 #include <gfx.hpp>
 // font for example
 // not necessary
@@ -64,6 +65,8 @@ mpu6886 gyro(i2c_container<0>::instance());
 
 ip5306 power(i2c_container<0>::instance());
 
+m5fire_audio sound;
+
 w2812 led_strips({5,2},led_pin,NEO_GBR);
 
 button<button_a_pin,10,true> button_a;
@@ -84,7 +87,7 @@ void initialize_m5stack_fire() {
     lcd.fill(rect,color_t::white);
     lcd.fill(rect.inflate(-8,-8),color_t::purple);
     gyro.initialize();
-    
+    sound.initialize();
     // see https://github.com/m5stack/m5-docs/blob/master/docs/en/core/fire.md
     pinMode(led_pin, OUTPUT_OPEN_DRAIN);
     button_a.initialize();
@@ -147,6 +150,9 @@ void setup() {
     draw::text(lcd,text_rect,text_draw_info,color_t::red);
     led_strips.fill({0,0,4,0},lscolor_t::red);
     led_strips.fill({0,1,4,1},lscolor_t::blue);
+    sound.sinw(800,.025);
+    delay(1000);
+    sound.stop();
 }
 void loop() {
     // pump the buttons to make sure
