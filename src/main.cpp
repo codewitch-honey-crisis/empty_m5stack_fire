@@ -150,10 +150,10 @@ void setup() {
     draw::text(lcd,text_rect,text_draw_info,color_t::red);
     led_strips.fill({0,0,4,0},lscolor_t::red);
     led_strips.fill({0,1,4,1},lscolor_t::blue);
-    sound.sinw(400,.025);
-    delay(1000);
-    sound.sinw(800,.025);
-    delay(1000);
+    sound.sinw(2000,.05);
+    delay(50);
+    sound.sinw(1000,.05);
+    delay(50);
     sound.stop();
 }
 void loop() {
