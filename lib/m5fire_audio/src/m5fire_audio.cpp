@@ -16,7 +16,7 @@
 static bool m5fire_audio_initialized = false;
 static TaskHandle_t m5fire_audio_task;
 static QueueHandle_t m5fire_audio_queue;
-static uint16_t m5fire_audio_out_buf[DMA_BUF_LEN];
+static uint8_t m5fire_audio_out_buf[DMA_BUF_LEN];
 struct m5fire_audio_queue_message {
     int cmd;
     uint32_t data[2];
@@ -49,11 +49,11 @@ void m5fire_audio_sin(m5fire_audio_queue_message& msg) {
                     break;
                 case 3:
                     // square wave
-                    // DOESN'T WORK
+                    // DOESN'T WORK!
                     f = p>PI;
                     break;
                 case 4:
-                    // triangle wave
+                    // saw wave
                     f=(p/TWO_PI);
                     break;
             }
@@ -67,8 +67,8 @@ void m5fire_audio_sin(m5fire_audio_queue_message& msg) {
             // Scale to 16-bit integer range
             samp = f* 255.0f * s.volume;
 
-            // Shift to MSB of 16-bit int for internal DAC
-            m5fire_audio_out_buf[i] = (uint16_t)samp << 8;
+            // Shift to MSB of 8-bit int for internal DAC
+            m5fire_audio_out_buf[i] = samp;
         }
         // Write with max delay. We want to push buffers as fast as we
         // can into DMA memory. If DMA memory isn't transmitted yet this
@@ -122,7 +122,7 @@ bool m5fire_audio::initialize() {
         memset(&i2s_config,0,sizeof(i2s_config_t));
         i2s_config.mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN );
         i2s_config.sample_rate = SAMPLE_RATE;
-        i2s_config.bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT;
+        i2s_config.bits_per_sample = I2S_BITS_PER_SAMPLE_8BIT;
         i2s_config.channel_format = I2S_CHANNEL_FMT_ONLY_LEFT;
         i2s_config.communication_format = I2S_COMM_FORMAT_STAND_MSB;
         i2s_config.dma_buf_count = DMA_NUM_BUF;
@@ -195,7 +195,7 @@ bool m5fire_audio::sinw(float frequency,float volume = 1.0) {
     }
     return false;
 }*/
-bool m5fire_audio::triw(float frequency,float volume = 1.0) {
+bool m5fire_audio::saww(float frequency,float volume = 1.0) {
     if(volume==0.0) {
         return true;
     }
