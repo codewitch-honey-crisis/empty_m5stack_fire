@@ -111,6 +111,9 @@ void buttons_callback(bool pressed, void* state) {
     Serial.printf("Button %c %s\n",ch,pressed?"pressed":"released");
     if(pressed) {
         lcd_dimmer.wake();
+        led_strips.fill({0,0,4,0},lscolor_t::red);
+        led_strips.fill({0,1,4,1},lscolor_t::blue);
+    
     }
 }
 void setup() {
@@ -178,4 +181,8 @@ void loop() {
     button_a.update();
     button_b.update();
     button_c.update();
+
+    if(lcd_dimmer.dimmed()) {
+        led_strips.fill(led_strips.bounds(),lscolor_t::black);
+    }
 }
