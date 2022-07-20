@@ -8,6 +8,7 @@
 #include <w2812.hpp>
 #include <htcw_button.hpp>
 #include <m5fire_audio.hpp>
+#include <m5fire_lcd_dimmer.hpp>
 #include <gfx.hpp>
 // font for example
 // not necessary
@@ -73,6 +74,12 @@ button<button_a_pin,10,true> button_a;
 button<button_b_pin,10,true> button_b;
 button<button_c_pin,10,true> button_c;
 
+constexpr static const uint32_t lcd_dimmer_timout_ms = 5*1000;
+
+bool lcd_dimmer_dimmed;
+
+m5fire_lcd_dimmer lcd_dimmer;
+
 // initialize M5 Stack Fire peripherals/features
 void initialize_m5stack_fire() {
     Serial.begin(115200);
@@ -93,16 +100,21 @@ void initialize_m5stack_fire() {
     button_a.initialize();
     button_b.initialize();
     button_c.initialize();
+    lcd_dimmer.initialize();
+    lcd_dimmer.timeout(lcd_dimmer_timout_ms);
 }
 
 // for the button callbacks
 char button_states[3];
 void buttons_callback(bool pressed, void* state) {
-    Serial.printf("Button %c %s\n",*(char*)state,pressed?"pressed":"released");
+    char ch = *(char*)state;
+    Serial.printf("Button %c %s\n",ch,pressed?"pressed":"released");
+    if(pressed) {
+        lcd_dimmer.wake();
+    }
 }
 void setup() {
     initialize_m5stack_fire();
-    
     // setup the button callbacks (optional)
     button_states[0]='a';
     button_states[1]='b';
@@ -112,8 +124,6 @@ void setup() {
     button_c.callback(buttons_callback,button_states+2);
     
     // your code here
-
-    
     // example - go ahead and delete
     lcd.fill(lcd.bounds(),color_t::black);
     const char* m5_text = "M5Stack";
@@ -150,13 +160,18 @@ void setup() {
     draw::text(lcd,text_rect,text_draw_info,color_t::red);
     led_strips.fill({0,0,4,0},lscolor_t::red);
     led_strips.fill({0,1,4,1},lscolor_t::blue);
-    sound.sinw(2000,.05);
+    sound.sinw(2000,.5);
     delay(50);
-    sound.sinw(1000,.05);
+    sound.sinw(1000,.5);
+    delay(50);
+    sound.sinw(500,.5);
     delay(50);
     sound.stop();
+
 }
 void loop() {
+    // pump the dimmer
+    lcd_dimmer.update();
     // pump the buttons to make sure
     // their callbacks (if any) get
     // fired
