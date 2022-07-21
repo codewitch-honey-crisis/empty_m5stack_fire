@@ -17,6 +17,6 @@ public:
     bool stop();
 
     // generate a square based tone at the specified hz, and a volume multiplier between 0 and 1
-    //bool sqrw(float frequency,float volume);
+    bool sqrw(float frequency,float volume);
     
 };

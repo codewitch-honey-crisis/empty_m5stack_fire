@@ -183,9 +183,9 @@ bool m5fire_audio::triw(float frequency,float volume = 1.0) {
     return m5fire_audio_shape(3,frequency,volume);
 }
 
-/*bool m5fire_audio::sqrw(float frequency,float volume = 1.0) {
+bool m5fire_audio::sqrw(float frequency,float volume = 1.0) {
     return m5fire_audio_shape(1,frequency,volume);
-}*/
+}
 bool m5fire_audio::saww(float frequency,float volume = 1.0) {
     return m5fire_audio_shape(2,frequency,volume);
 }

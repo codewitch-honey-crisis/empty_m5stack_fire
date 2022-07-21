@@ -167,6 +167,7 @@ void setup() {
     sound.sinw(500,.05);
     delay(50);
     sound.stop();
+    
 
 }
 void loop() {
