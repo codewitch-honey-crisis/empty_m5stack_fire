@@ -8,7 +8,7 @@
 #include <w2812.hpp>
 #include <htcw_button.hpp>
 #include <m5fire_audio.hpp>
-#include <m5fire_lcd_dimmer.hpp>
+#include <lcd_miser.hpp>
 #include <gfx.hpp>
 // font for example
 // not necessary
@@ -76,7 +76,7 @@ button<button_c_pin,10,true> button_c;
 
 constexpr static const uint32_t lcd_dimmer_timout_ms = 5*1000;
 
-m5fire_lcd_dimmer lcd_dimmer;
+lcd_miser<lcd_pin_bl,true> lcd_dimmer;
 
 // initialize M5 Stack Fire peripherals/features
 void initialize_m5stack_fire() {
@@ -160,11 +160,11 @@ void setup() {
     draw::text(lcd,text_rect,text_draw_info,color_t::red);
     led_strips.fill({0,0,4,0},lscolor_t::red);
     led_strips.fill({0,1,4,1},lscolor_t::blue);
-    sound.sinw(2000,.5);
+    sound.sinw(2000,.05);
     delay(50);
-    sound.sinw(1000,.5);
+    sound.sinw(1000,.05);
     delay(50);
-    sound.sinw(500,.5);
+    sound.sinw(500,.05);
     delay(50);
     sound.stop();
 
